@@ -1,13 +1,11 @@
-import { Injectable, Req, Res } from '@nestjs/common';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Injectable } from '@nestjs/common';
 import {Todo} from "../todo";
 
 @Injectable()
 export class TodosService {
   todos: Todo[] = [];
   
-  create(newTodo: Todo) {
+  create(newTodo:Todo) {
     const id = Date.now();
     this.todos.push({id,...newTodo});
   }
@@ -20,10 +18,9 @@ export class TodosService {
     return this.todos.filter(obj=>obj.id===id);
   }
 
-  update(todo:Todo, id: number) {
-    
+  update(id: number, task, done) {
     let index = this.todos.findIndex(obj=>obj.id===id);
-    this.todos[index]=todo;
+    this.todos[index]={id, task, done};
   }
 
   remove(id: number) {

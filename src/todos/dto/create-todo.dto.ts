@@ -1,5 +1,7 @@
+
+import { IsNumber, IsBoolean } from 'class-validator';
 export class CreateTodoDto {
     id:number;
-    name:string;
-    done: boolean;
+    task:string;
+    done: string;
 }

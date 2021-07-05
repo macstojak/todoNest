@@ -1,12 +1,18 @@
-import { Controller, Get, Post, Patch, Body, Param, Delete, Render, ParseIntPipe, UsePipes, ValidationPipe} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Delete, Render, ParseIntPipe} from '@nestjs/common';
 import { TodosService } from './todos.service';
 import {Todo} from "../todo";
-
+import {CreateTodoDto} from "./dto/create-todo.dto";
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
+  @Get()
+  
+  root() {
+    return { message: 'Hello world!' };
+  }
 
   @Get()
+  @Render('index')
   async findAll(): Promise<Todo[]> {
     return this.todosService.findAll();
   }
@@ -17,14 +23,16 @@ export class TodosController {
   }
 
   @Post()
-  async create(@Body() todo:Todo) {
-    this.todosService.create(todo);
+  async create(@Body() createTodoDto: CreateTodoDto) {
+    this.todosService.create(createTodoDto);
   }
 
   @Patch(':id')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  update(@Body() todo:Todo, @Param("id",ParseIntPipe) id:number) {
-    return this.todosService.update(todo, id);
+  update( @Param("id",ParseIntPipe) id:number,
+  @Body("task") task: string,
+  @Body("done") done: string
+  ) {
+    return this.todosService.update(id, task, done);
   }
 
   @Delete(':id')
